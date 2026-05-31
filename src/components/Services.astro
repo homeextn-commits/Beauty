@@ -1,8 +1,9 @@
 ---
+const base = (Astro.base ?? import.meta.env.BASE_URL ?? "").replace(/\/$/, "");
 const services = [
-  { icon: "✂", name: "Hair Salon", desc: "Стрижки, окрашивание, укладки любой сложности" },
-  { icon: "✦", name: "Beauty Salon", desc: "Макияж, оформление бровей, наращивание ресниц" },
-  { icon: "◈", name: "Wellness", desc: "Уходовые процедуры за кожей лица и тела" },
+  { icon: "✂", name: "Salon fryzjerski", desc: "Fryzury, koloryzacja, stylizacje każdej trudności" },
+  { icon: "✦", name: "Salon piękności", desc: "Makijaż, stylizacja brwi, przedłużanie rzęs" },
+  { icon: "◈", name: "Wellness", desc: "Zabiegi pielęgnacyjne twarzy i ciała" },
 ];
 ---
 
@@ -12,7 +13,7 @@ const services = [
       <div class="services__icon">{s.icon}</div>
       <div class="services__name">{s.name}</div>
       <div class="services__desc">{s.desc}</div>
-      <a href="#booking" class="services__link">Подробнее →</a>
+      <a href={base + '/#booking'} class="services__link">Dowiedz się więcej →</a>
     </div>
   ))}
 </section>

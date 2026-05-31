@@ -1,4 +1,6 @@
 ---
+import Footer from "../components/Footer.astro";
+
 interface Props {
   title?: string;
   description?: string;
@@ -6,8 +8,8 @@ interface Props {
   url?: string;
 }
 const {
-  title = "La Belle — Салон красоты",
-  description = "Премиум салон красоты La Belle — онлайн-запись, лучшие мастера и профессиональный уход за волосами.",
+  title = "La Belle — Salon urody w Warszawie",
+  description = "La Belle to luksusowy salon urody w Warszawie z rezerwacją online, najlepszymi specjalistami i kompleksową pielęgnacją włosów.",
   image = "/photos/hero.jpg",
   url = "https://homeextn-commits.github.io/Beauty/",
 } = Astro.props;
@@ -16,19 +18,22 @@ const ogUrl = url.replace(/\/$/, "") + "/";
 const ogImage = image.startsWith("http") ? image : `${ogUrl.replace(/\/$/, "")}/${image.replace(/^\//, "")}`;
 ---
 <!doctype html>
-<html lang="ru">
+<html lang="pl">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <meta name="keywords" content="salon urody, fryzjer, rezerwacja online, zabiegi kosmetyczne, La Belle, salon w Warszawie, Warszawa, manicure, makijaż" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href={ogUrl} />
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={ogUrl} />
     <meta property="og:image" content={ogImage} />
-    <meta property="og:site_name" content="La Belle — Салон красоты" />
-    <meta property="og:locale" content="ru_RU" />
+    <meta property="og:site_name" content="La Belle — Salon urody" />
+    <meta property="og:locale" content="pl_PL" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
@@ -40,6 +45,7 @@ const ogImage = image.startsWith("http") ? image : `${ogUrl.replace(/\/$/, "")}/
   </head>
   <body>
     <slot />
+    <Footer />
   </body>
 </html>
 
@@ -122,4 +128,53 @@ const ogImage = image.startsWith("http") ? image : `${ogUrl.replace(/\/$/, "")}/
     transition: all .3s; width: 6px; padding: 0;
   }
   .dot.active { width: 20px; background: var(--accent); }
+
+  .footer {
+    background: #0d0b0b;
+    border-top: 1px solid rgba(245,240,238,0.08);
+    padding: 3rem 0 2rem;
+  }
+  .footer__inner {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 2rem;
+    align-items: start;
+  }
+  .footer__title {
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    margin-bottom: 0.75rem;
+    letter-spacing: 0.08em;
+  }
+  .footer__label {
+    color: var(--muted);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    margin-bottom: 0.35rem;
+  }
+  .footer__contacts {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(180px, 1fr));
+    gap: 1.5rem;
+  }
+  .footer__contacts a,
+  .footer__contacts address,
+  .footer__contacts p {
+    color: var(--text);
+    font-size: 0.95rem;
+    line-height: 1.8;
+  }
+  .footer__contacts address { font-style: normal; }
+  .footer__disclaimer {
+    margin-top: 1.2rem;
+    max-width: 560px;
+    color: rgba(245,240,238,0.75);
+    font-size: 0.9rem;
+    line-height: 1.7;
+  }
+  @media (max-width: 720px) {
+    .footer__inner { grid-template-columns: 1fr; }
+    .footer__contacts { grid-template-columns: 1fr; }
+  }
 </style>

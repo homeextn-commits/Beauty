@@ -1,16 +1,16 @@
 ---
 const base = (Astro.base ?? import.meta.env.BASE_URL ?? "").replace(/\/$/, "");
 const team = [
-  { photo: "/photos/anna.jpg", name: "Анна Соколова", role: "Топ-стилист", exp: "8 лет" },
-  { photo: "/photos/maria.jpg", name: "Мария Белова", role: "Колорист", exp: "6 лет" },
-  { photo: "/photos/elena.jpg", name: "Елена Краснова", role: "Бьюти-мастер", exp: "5 лет" },
+  { photo: "/photos/anna.jpg", name: "Anna Sokołowa", role: "Fryzjerka", exp: "8 lat" },
+  { photo: "/photos/maria.jpg", name: "Maria Biełowa", role: "Koloryzacja", exp: "6 lat" },
+  { photo: "/photos/elena.jpg", name: "Elena Krasnowa", role: "Stylistka", exp: "5 lat" },
 ];
 ---
 
 <section class="team" id="team">
   <div class="team__header">
-    <div class="team__label">Команда</div>
-    <h2 class="team__title"><em>Мастера своего дела</em></h2>
+    <div class="team__label">Zespół</div>
+    <h2 class="team__title"><em>Specjaliści w swoim fachu</em></h2>
   </div>
 
   <div class="team__swiper" id="teamSwiper">
@@ -23,7 +23,7 @@ const team = [
           <div class="team__info">
             <div class="team__name">{m.name}</div>
             <div class="team__role">{m.role}</div>
-            <div class="team__exp">Опыт: {m.exp}</div>
+            <div class="team__exp">Doświadczenie: {m.exp}</div>
           </div>
         </div>
       ))}

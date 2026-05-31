@@ -1,4 +1,4 @@
-import { createServerClient, parseCookieHeader, serializeCookieHeader } from "@supabase/ssr";
+import { createServerClient, parseCookieHeader } from "@supabase/ssr";
 import type { AstroCookies } from "astro";
 
 const mockSupabase = {
@@ -29,7 +29,7 @@ export function createSupabaseClient(cookies: AstroCookies) {
             cookies.set(name, value, options);
           });
         },
-        // 👇 ДОБАВЬТЕ ЭТУ СТРОКУ, чтобы отключить WebSocket на сервере
+        // Disable realtime WebSocket on the server side
         realtime: { global: false },
       },
     }

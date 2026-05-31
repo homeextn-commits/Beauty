@@ -12,24 +12,24 @@ const base = (Astro.base ?? import.meta.env.BASE_URL ?? "").replace(/\/$/, "");
       <span class="header__logo-dot"></span>
       <div>
         <div class="header__logo-name">La <span>Belle</span></div>
-        <div class="header__logo-sub">Beauty Salon</div>
+        <div class="header__logo-sub">Salon urody</div>
       </div>
     </a>
 
     <nav class="header__nav">
-      <a href={base + '/#services'}>Услуги</a>
-      <a href={base + '/#team'}>О нас</a>
-      <a href={base + '/#reviews'}>Отзывы</a>
-      <a href={base + '/#booking'} class="btn btn-primary" style="padding:.5rem 1.25rem;font-size:.78rem">Записаться</a>
+      <a href={base + '/#services'}>Usługi</a>
+      <a href={base + '/#team'}>O nas</a>
+      <a href={base + '/#reviews'}>Opinie</a>
+      <a href={base + '/#booking'} class="btn btn-primary" style="padding:.5rem 1.25rem;font-size:.78rem">Zarezerwuj</a>
 
-      <a href={user ? base + '/dashboard' : base + '/login'} class="header__user" title={user ? user.email : "Войти"}>
+      <a href={user ? base + '/dashboard' : base + '/login'} class="header__user" title={user ? user.email : "Zaloguj się"}>
         {user
           ? <span class="header__user-avatar">✓</span>
           : <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
         }
       </a>
 
-      <button class="header__burger" id="burger" aria-label="Меню">
+      <button class="header__burger" id="burger" aria-label="Menu">
         <span></span><span></span><span></span>
       </button>
     </nav>
@@ -39,13 +39,13 @@ const base = (Astro.base ?? import.meta.env.BASE_URL ?? "").replace(/\/$/, "");
 <!-- Mobile drawer -->
 <div class="drawer" id="drawer">
   <div class="drawer__links">
-    <a href={base + '/#services'} class="drawer__link">Услуги</a>
-    <a href={base + '/#team'} class="drawer__link">О нас</a>
-    <a href={base + '/#reviews'} class="drawer__link">Отзывы</a>
-    <a href={base + '/#booking'} class="drawer__link">Цены</a>
+    <a href={base + '/#services'} class="drawer__link">Usługi</a>
+    <a href={base + '/#team'} class="drawer__link">O nas</a>
+    <a href={base + '/#reviews'} class="drawer__link">Opinie</a>
+    <a href={base + '/#booking'} class="drawer__link">Cennik</a>
   </div>
   <a href={user ? base + '/dashboard' : base + '/login'} class="btn btn-primary" style="margin-top:auto">
-    {user ? "Мой кабинет" : "Записаться онлайн"}
+    {user ? "Moje konto" : "Zarezerwuj online"}
   </a>
 </div>
 
