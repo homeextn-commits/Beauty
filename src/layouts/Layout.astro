@@ -1,8 +1,19 @@
 ---
 interface Props {
   title?: string;
+  description?: string;
+  image?: string;
+  url?: string;
 }
-const { title = "La Belle — Салон красоты" } = Astro.props;
+const {
+  title = "La Belle — Салон красоты",
+  description = "Премиум салон красоты La Belle — онлайн-запись, лучшие мастера и профессиональный уход за волосами.",
+  image = "/photos/hero.jpg",
+  url = "https://homeextn-commits.github.io/Beauty/",
+} = Astro.props;
+const base = (Astro.base ?? import.meta.env.BASE_URL ?? "").replace(/\/$/, "");
+const ogUrl = url.replace(/\/$/, "") + "/";
+const ogImage = image.startsWith("http") ? image : `${ogUrl.replace(/\/$/, "")}/${image.replace(/^\//, "")}`;
 ---
 <!doctype html>
 <html lang="ru">
@@ -10,6 +21,19 @@ const { title = "La Belle — Салон красоты" } = Astro.props;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={ogUrl} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:site_name" content="La Belle — Салон красоты" />
+    <meta property="og:locale" content="ru_RU" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="theme-color" content="#e8357a" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
