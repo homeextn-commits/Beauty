@@ -1,0 +1,117 @@
+---
+const base = (Astro.base ?? import.meta.env.BASE_URL ?? "").replace(/\/$/, "");
+const reviews = [
+  { name: "Ирина М.", text: "Невероятный результат! Мастер точно понял, чего я хотела. Уже третий год хожу только сюда.", photo: "/photos/anna.jpg" },
+  { name: "Светлана К.", text: "Лучшее окрашивание в городе. Волосы живые, блестящие, именно тот оттенок о котором мечтала.", photo: "/photos/elena.jpg" },
+  { name: "Наталья В.", text: "Атмосфера, сервис, результат — всё на высшем уровне. Рекомендую каждой девушке!", photo: "/photos/maria.jpg" },
+];
+---
+
+<section class="reviews" id="reviews">
+  <div class="reviews__header">
+    <div class="reviews__label">Отзывы</div>
+    <h2 class="reviews__title"><em>Счастливые клиенты</em></h2>
+  </div>
+
+  <div class="reviews__swiper">
+    <div class="reviews__track" id="reviewsTrack">
+      {reviews.map(r => (
+        <div class="reviews__slide">
+          <div class="reviews__card">
+            <div class="reviews__stars">★★★★★</div>
+            <p class="reviews__text">"{r.text}"</p>
+            <div class="reviews__author">
+              <img src={base + r.photo} alt={r.name} class="reviews__avatar" />
+              <div>
+                <div class="reviews__name">{r.name}</div>
+                <div class="reviews__sub">Постоянный клиент</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <div class="swiper-nav">
+    <button class="swiper-btn" id="reviewsPrev">‹</button>
+    <div class="swiper-dots" id="reviewsDots"></div>
+    <button class="swiper-btn" id="reviewsNext">›</button>
+  </div>
+</section>
+
+<script>
+  initSwiper('reviewsTrack', 'reviewsPrev', 'reviewsNext', 'reviewsDots', 5000);
+
+  function initSwiper(trackId, prevId, nextId, dotsId, autoMs) {
+    const track = document.getElementById(trackId);
+    const prev = document.getElementById(prevId);
+    const next = document.getElementById(nextId);
+    const dotsEl = document.getElementById(dotsId);
+    if (!track) return;
+    const slides = track.children.length;
+    let idx = 0, timer, touchStart = null;
+    for (let i = 0; i < slides; i++) {
+      const d = document.createElement('button');
+      d.className = 'dot' + (i === 0 ? ' active' : '');
+      d.addEventListener('click', () => go(i));
+      dotsEl?.appendChild(d);
+    }
+    function go(n) {
+      idx = ((n % slides) + slides) % slides;
+      track.style.transform = `translateX(${-idx * 100}%)`;
+      dotsEl?.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === idx));
+    }
+    function restart() { clearInterval(timer); if (autoMs) timer = setInterval(() => go(idx + 1), autoMs); }
+    prev?.addEventListener('click', () => { go(idx - 1); restart(); });
+    next?.addEventListener('click', () => { go(idx + 1); restart(); });
+    track.parentElement?.addEventListener('touchstart', e => { touchStart = e.touches[0].clientX; clearInterval(timer); });
+    track.parentElement?.addEventListener('touchend', e => {
+      if (touchStart === null) return;
+      const diff = touchStart - e.changedTouches[0].clientX;
+      if (Math.abs(diff) > 40) go(diff > 0 ? idx + 1 : idx - 1);
+      touchStart = null; restart();
+    });
+    restart();
+  }
+</script>
+
+<style>
+  .reviews {
+    padding: 3rem 0 2rem;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+  }
+  .reviews__header { text-align: center; padding: 0 1.5rem; margin-bottom: 28px; }
+  .reviews__label {
+    font-size: .65rem; font-weight: 500; letter-spacing: .2em;
+    text-transform: uppercase; color: var(--accent); margin-bottom: 10px;
+  }
+  .reviews__title {
+    font-family: var(--font-script);
+    font-size: clamp(2rem,8vw,2.8rem); font-weight: 300;
+  }
+  .reviews__swiper { overflow: hidden; }
+  .reviews__track {
+    display: flex;
+    transition: transform .45s cubic-bezier(.25,.46,.45,.94);
+  }
+  .reviews__slide { min-width: 100%; padding: 0 1.5rem; }
+  .reviews__card {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 1.75rem;
+  }
+  .reviews__stars { color: var(--accent); font-size: 1rem; margin-bottom: 16px; letter-spacing: 2px; }
+  .reviews__text {
+    font-family: var(--font-script); font-style: italic; font-weight: 300;
+    font-size: 1.05rem; color: var(--muted); line-height: 1.8; margin-bottom: 24px;
+  }
+  .reviews__author { display: flex; align-items: center; gap: 12px; }
+  .reviews__avatar {
+    width: 44px; height: 44px; border-radius: 50%;
+    object-fit: cover; object-position: center top;
+    border: 2px solid var(--accent); flex-shrink: 0;
+  }
+  .reviews__name { font-size: .9rem; font-weight: 600; }
+  .reviews__sub { font-size: .72rem; color: var(--muted); margin-top: 2px; }
+</style>

@@ -1,0 +1,28 @@
+---
+/*
+  DISABLED for static GitHub Pages deployment
+  
+  This page requires server-side logic to exchange OAuth codes for sessions.
+  To re-enable:
+  1. Switch to Vercel, Netlify, or Railway
+  2. Change astro.config.mjs to: output: 'server'
+  3. Uncomment the code below
+*/
+
+// export const prerender = false;
+// 
+// import { createSupabaseClient } from "../../lib/supabase";
+// 
+// const supabase = createSupabaseClient(Astro.cookies);
+// const code = Astro.url.searchParams.get("code");
+// 
+// if (!code) return Astro.redirect("/login?error=no_code");
+// 
+// const { error } = await supabase.auth.exchangeCodeForSession(code);
+// if (error) return Astro.redirect("/login?error=exchange_failed");
+// 
+// return Astro.redirect("/dashboard");
+---
+
+<h1>Auth Disabled</h1>
+<p>Authentication is disabled for static GitHub Pages. See file comments.</p>

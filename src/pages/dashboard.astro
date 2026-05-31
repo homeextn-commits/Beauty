@@ -1,0 +1,107 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+import { createSupabaseClient } from "../lib/supabase";
+
+const base = (Astro.base ?? import.meta.env.BASE_URL ?? "").replace(/\/$/, "");
+const supabase = createSupabaseClient(Astro.cookies);
+const { data: { session } } = await supabase.auth.getSession();
+const user = session?.user;
+const firstName = user?.user_metadata?.full_name?.split(" ")[0] || user?.email?.split("@")[0] || "Гость";
+
+const visits = [
+  { date: "20 мая 2026", service: "Окрашивание + укладка", cost: "6 800 ₽" },
+  { date: "12 апр 2026", service: "Стрижка + блонд", cost: "9 200 ₽" },
+  { date: "1 фев 2026", service: "Уход + маска", cost: "3 400 ₽" },
+];
+---
+
+<Layout title="Кабинет — La Belle">
+  <Header />
+  <main class="dash">
+    <div class="container">
+
+      <div class="dash__welcome">
+        <h1>Привет, <span>{firstName}</span></h1>
+        <p>{user?.email}</p>
+      </div>
+
+      <div class="dash__cards">
+        <div class="dash__card"><strong>3</strong><small>Визита</small></div>
+        <div class="dash__card"><strong>Июл 2026</strong><small>Следующее</small></div>
+        <div class="dash__card"><strong>19 400 ₽</strong><small>Потрачено</small></div>
+        <div class="dash__card"><strong>30%</strong><small>Ваша скидка</small></div>
+      </div>
+
+      <div class="dash__history">
+        <h2>История визитов</h2>
+        {visits.map(v => (
+          <div class="dash__visit">
+            <div>
+              <div class="dash__visit-service">{v.service}</div>
+              <div class="dash__visit-date">{v.date}</div>
+            </div>
+            <div class="dash__visit-cost">{v.cost}</div>
+          </div>
+        ))}
+      </div>
+
+      <form method="POST" action={base + '/auth/logout'}>
+        <button type="submit" class="dash__logout">Выйти из аккаунта</button>
+      </form>
+
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .dash { padding-top: 80px; min-height: 100svh; }
+  .dash__welcome { margin-bottom: 32px; }
+  .dash__welcome h1 {
+    font-family: var(--font-script); font-style: italic;
+    font-size: clamp(1.8rem,6vw,3rem); font-weight: 300;
+  }
+  .dash__welcome h1 span { color: var(--accent); }
+  .dash__welcome p { font-size: .85rem; color: var(--muted); margin-top: 4px; }
+  .dash__cards {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 12px; margin-bottom: 36px;
+  }
+  .dash__card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 1.25rem;
+  }
+  .dash__card strong {
+    display: block; font-family: var(--font-display);
+    font-size: 1.5rem; color: var(--accent); line-height: 1;
+  }
+  .dash__card small {
+    font-size: .65rem; color: var(--muted);
+    text-transform: uppercase; letter-spacing: .1em;
+    margin-top: 6px; display: block;
+  }
+  .dash__history h2 {
+    font-family: var(--font-display); font-size: 1.1rem;
+    color: var(--muted); margin-bottom: 12px;
+  }
+  .dash__visit {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1rem 1.25rem;
+    background: var(--surface); border: 1px solid var(--border);
+    margin-bottom: 2px; border-radius: 4px;
+    transition: background .2s;
+  }
+  .dash__visit:hover { background: var(--surface2); }
+  .dash__visit-service { font-size: .9rem; font-weight: 500; }
+  .dash__visit-date { font-size: .75rem; color: var(--muted); margin-top: 2px; }
+  .dash__visit-cost { font-size: .9rem; font-weight: 700; color: var(--accent); }
+  .dash__logout {
+    margin-top: 32px; width: 100%; padding: .9rem;
+    font-family: var(--font-body); font-weight: 500; font-size: .82rem;
+    letter-spacing: .1em; text-transform: uppercase;
+    border: 1px solid var(--border); background: none;
+    color: var(--muted); border-radius: 4px; cursor: pointer;
+    transition: all .2s;
+  }
+  .dash__logout:hover { border-color: #f08080; color: #f08080; }
+</style>

@@ -1,0 +1,52 @@
+---
+const services = [
+  { icon: "✂", name: "Hair Salon", desc: "Стрижки, окрашивание, укладки любой сложности" },
+  { icon: "✦", name: "Beauty Salon", desc: "Макияж, оформление бровей, наращивание ресниц" },
+  { icon: "◈", name: "Wellness", desc: "Уходовые процедуры за кожей лица и тела" },
+];
+---
+
+<section class="services" id="services">
+  {services.map((s, i) => (
+    <div class="services__item">
+      <div class="services__icon">{s.icon}</div>
+      <div class="services__name">{s.name}</div>
+      <div class="services__desc">{s.desc}</div>
+      <a href="#booking" class="services__link">Подробнее →</a>
+    </div>
+  ))}
+</section>
+
+<style>
+  .services {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .services__item {
+    padding: 2.5rem 1.75rem;
+    border-bottom: 1px solid var(--border);
+    transition: background .25s;
+  }
+  .services__item:last-child { border-bottom: none; }
+  .services__item:hover { background: var(--surface2); }
+  .services__icon {
+    width: 56px; height: 56px; border-radius: 50%;
+    border: 1.5px solid rgba(232,53,122,.4);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem; color: var(--accent);
+    margin-bottom: 16px;
+  }
+  .services__name {
+    font-family: var(--font-display);
+    font-size: 1.75rem; font-weight: 700; margin-bottom: 10px;
+  }
+  .services__desc {
+    font-size: .95rem; color: var(--muted);
+    line-height: 1.7; font-weight: 300; margin-bottom: 16px;
+  }
+  .services__link {
+    font-size: .75rem; color: var(--accent);
+    letter-spacing: .12em; text-transform: uppercase; font-weight: 500;
+  }
+</style>

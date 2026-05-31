@@ -1,0 +1,176 @@
+---
+import { createSupabaseClient } from "../lib/supabase";
+const supabase = createSupabaseClient(Astro.cookies);
+const { data: { session } } = await supabase.auth.getSession();
+const user = session?.user;
+const base = (Astro.base ?? import.meta.env.BASE_URL ?? "").replace(/\/$/, "");
+---
+
+<header class="header" id="header">
+  <div class="container header__inner">
+    <a href={base + '/'} class="header__logo">
+      <span class="header__logo-dot"></span>
+      <div>
+        <div class="header__logo-name">La <span>Belle</span></div>
+        <div class="header__logo-sub">Beauty Salon</div>
+      </div>
+    </a>
+
+    <nav class="header__nav">
+      <a href={base + '/#services'}>Услуги</a>
+      <a href={base + '/#team'}>О нас</a>
+      <a href={base + '/#reviews'}>Отзывы</a>
+      <a href={base + '/#booking'} class="btn btn-primary" style="padding:.5rem 1.25rem;font-size:.78rem">Записаться</a>
+
+      <a href={user ? base + '/dashboard' : base + '/login'} class="header__user" title={user ? user.email : "Войти"}>
+        {user
+          ? <span class="header__user-avatar">✓</span>
+          : <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        }
+      </a>
+
+      <button class="header__burger" id="burger" aria-label="Меню">
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<!-- Mobile drawer -->
+<div class="drawer" id="drawer">
+  <div class="drawer__links">
+    <a href={base + '/#services'} class="drawer__link">Услуги</a>
+    <a href={base + '/#team'} class="drawer__link">О нас</a>
+    <a href={base + '/#reviews'} class="drawer__link">Отзывы</a>
+    <a href={base + '/#booking'} class="drawer__link">Цены</a>
+  </div>
+  <a href={user ? base + '/dashboard' : base + '/login'} class="btn btn-primary" style="margin-top:auto">
+    {user ? "Мой кабинет" : "Записаться онлайн"}
+  </a>
+</div>
+
+<script>
+  const burger = document.getElementById('burger');
+  const drawer = document.getElementById('drawer');
+  const header = document.getElementById('header');
+
+  const drawerLinks = drawer?.querySelectorAll('a') ?? [];
+
+  function closeDrawer() {
+    drawer?.classList.remove('open');
+    burger?.classList.remove('active');
+  }
+
+  burger?.addEventListener('click', () => {
+    drawer?.classList.toggle('open');
+    burger?.classList.toggle('active');
+  });
+
+  drawerLinks.forEach(link => {
+    link.addEventListener('click', closeDrawer);
+  });
+
+  window.addEventListener('scroll', () => {
+    header?.classList.toggle('scrolled', window.scrollY > 40);
+  });
+</script>
+
+<style>
+  .header {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    height: 64px;
+    transition: all .3s;
+    border-bottom: 1px solid transparent;
+  }
+  .header.scrolled {
+    background: rgba(17,16,16,.95);
+    backdrop-filter: blur(14px);
+    border-bottom-color: var(--border);
+  }
+  .header__inner {
+    height: 64px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .header__logo {
+    display: flex; align-items: center; gap: 8px;
+    text-decoration: none;
+  }
+  .header__logo-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--accent);
+    animation: pulse 2s ease infinite;
+    flex-shrink: 0;
+  }
+  .header__logo-name {
+    font-family: var(--font-script);
+    font-style: italic; font-size: 1.35rem; font-weight: 300;
+    color: var(--text); line-height: 1;
+  }
+  .header__logo-name span { color: var(--accent); font-weight: 600; }
+  .header__logo-sub {
+    font-size: 0.5rem; letter-spacing: .22em;
+    text-transform: uppercase; color: var(--muted); margin-top: 1px;
+  }
+  .header__nav {
+    display: flex; align-items: center; gap: 28px;
+  }
+  .header__nav > a:not(.btn) {
+    font-size: .78rem; font-weight: 500; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--muted); transition: color .2s;
+  }
+  .header__nav > a:not(.btn):hover { color: var(--text); }
+  .header__user {
+    width: 36px; height: 36px; border-radius: 50%;
+    border: 1.5px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--muted); transition: all .2s;
+    text-decoration: none;
+  }
+  .header__user:hover { border-color: var(--accent); color: var(--accent); }
+  .header__user-avatar {
+    font-size: .85rem; color: var(--accent); font-weight: 700;
+  }
+  .header__burger {
+    display: none; flex-direction: column; gap: 5px;
+    background: none; border: 1.5px solid var(--border);
+    border-radius: 6px; padding: 7px; cursor: pointer;
+    transition: border-color .2s;
+  }
+  .header__burger span {
+    display: block; width: 18px; height: 1.5px;
+    background: var(--text); transition: all .25s;
+  }
+  .header__burger:hover { border-color: var(--accent); }
+  .header__burger.active span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+  .header__burger.active span:nth-child(2) { opacity: 0; }
+  .header__burger.active span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+  /* Drawer */
+  .drawer {
+    position: fixed; top: 64px; left: 0; right: 0; bottom: 0; z-index: 99;
+    background: rgba(17,16,16,.97); backdrop-filter: blur(16px);
+    display: flex; flex-direction: column; padding: 2.5rem 1.75rem;
+    transform: translateX(100%); transition: transform .35s ease;
+  }
+  .drawer.open { transform: translateX(0); }
+  .drawer__links { display: flex; flex-direction: column; gap: 0; }
+  .drawer__link {
+    font-family: var(--font-display); font-size: 2rem; font-weight: 700;
+    color: var(--text); padding: .75rem 0;
+    border-bottom: 1px solid var(--border);
+    transition: color .2s;
+  }
+  .drawer__link:hover { color: var(--accent); }
+
+  @keyframes pulse {
+    0%,100% { opacity:1; transform:scale(1); }
+    50% { opacity:.4; transform:scale(.75); }
+  }
+
+  @media (max-width: 768px) {
+    .header__nav > a:not(.btn):not(.header__user) { display: none; }
+    .header__nav > .btn:not(.header__user) { display: none; }
+    .header__burger { display: flex; }
+    .header { background: rgba(17,16,16,.95); border-bottom-color: var(--border); }
+  }
+</style>
